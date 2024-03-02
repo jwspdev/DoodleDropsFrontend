@@ -1,5 +1,5 @@
 import 'package:doodle_drops/src/modules/auth/data/models/responses/register_user/register_user_response_data.dart';
-import 'package:doodle_drops/src/modules/auth/domain/entities/responses/register_user/register_user_response.dart';
+import 'package:doodle_drops/src/modules/auth/domain/entities/responses/register_user/register_user_response_entity.dart';
 
 class RegisterUserResponse extends RegisterUserResponseEntity {
   const RegisterUserResponse(

@@ -13,7 +13,7 @@ class _AuthenticationApiService implements AuthenticationApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= DOODLE_DROPS_ENDPOINT;
+    baseUrl ??= 'http://192.168.0.102:8000/api';
   }
 
   final Dio _dio;
@@ -23,7 +23,7 @@ class _AuthenticationApiService implements AuthenticationApiService {
   @override
   Future<HttpResponse<RegisterUserResponse>> register(
       RegisterUserRequest registerUserRequest) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -53,7 +53,7 @@ class _AuthenticationApiService implements AuthenticationApiService {
   @override
   Future<HttpResponse<LoginUserResponse>> login(
       LoginUserRequest loginUserRequest) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -76,6 +76,36 @@ class _AuthenticationApiService implements AuthenticationApiService {
               baseUrl,
             ))));
     final value = LoginUserResponse.fromJson(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<UserResponse>> getCurrentUserDetails(
+      String authentication) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authentication};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<UserResponse>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/get/current',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserResponse.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
