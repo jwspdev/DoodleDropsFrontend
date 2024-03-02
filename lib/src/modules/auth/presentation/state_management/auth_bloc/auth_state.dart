@@ -36,7 +36,7 @@ final class RegisterSuccessState extends AuthState {
 }
 
 final class AuthErrorState extends AuthState {
-  final DioException? exception;
+  final Exception? exception;
 
   const AuthErrorState(this.exception);
   @override
@@ -44,7 +44,10 @@ final class AuthErrorState extends AuthState {
 }
 
 final class AuthenticationState extends AuthState {
-  const AuthenticationState({super.authToken, super.authenticationStatus});
+  final UserResponse? userResponse;
+  const AuthenticationState(
+      {this.userResponse, super.authToken, super.authenticationStatus});
   @override
-  List<Object> get props => [authenticationStatus!, authToken ?? ''];
+  List<Object> get props =>
+      [authenticationStatus!, authToken ?? '', userResponse ?? {}];
 }
