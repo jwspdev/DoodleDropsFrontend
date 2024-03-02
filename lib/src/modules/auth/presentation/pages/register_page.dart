@@ -20,12 +20,15 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
+  late TextEditingController _displayNameController;
   bool _isBlurred = false;
 
   @override
   void initState() {
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
+    _displayNameController = TextEditingController();
+
     super.initState();
   }
 
@@ -106,7 +109,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           const SmallestHeightedSizedBox(),
                           const Align(
                               alignment: Alignment.bottomLeft,
-                              child: Text("Username")),
+                              child: Text("Display Name")),
+                          AuthTextField(
+                              obscureText: false,
+                              controller: _displayNameController),
+                          const Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text("Email")),
                           AuthTextField(
                               obscureText: false,
                               controller: _usernameController),
@@ -187,7 +196,9 @@ class _RegisterPageState extends State<RegisterPage> {
     toggle();
     Future.delayed(const Duration(seconds: 3), () {
       BlocProvider.of<AuthBloc>(context).add(RegisterUserEvent(
-          email: _usernameController.text, password: _passwordController.text));
+          email: _usernameController.text,
+          password: _passwordController.text,
+          displayName: _displayNameController.text));
     });
   }
 

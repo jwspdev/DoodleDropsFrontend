@@ -18,14 +18,15 @@ class LoginUserEvent extends AuthEvent {
   List<Object> get props => [email, password];
 }
 
-//TODO ADD MORE FOR REGISTRATION IF BACKEND IS FINISHED
 class RegisterUserEvent extends AuthEvent {
   final String email;
   final String password;
-  const RegisterUserEvent({required this.email, required this.password});
+  final String? displayName;
+  const RegisterUserEvent(
+      {required this.email, required this.password, this.displayName});
 
   @override
-  List<Object> get props => [email, password];
+  List<Object> get props => [email, password, displayName!];
 }
 
 class LogoutUserEvent extends AuthEvent {}
