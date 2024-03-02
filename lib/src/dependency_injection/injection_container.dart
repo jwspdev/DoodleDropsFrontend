@@ -3,10 +3,13 @@ import 'package:doodle_drops/src/modules/auth/data/data_sources/local/secured_st
 import 'package:doodle_drops/src/modules/auth/data/data_sources/remote/authentication_api_service.dart';
 import 'package:doodle_drops/src/modules/auth/data/repositories/token_repository_implementation.dart';
 import 'package:doodle_drops/src/modules/auth/data/repositories/user_auth_repository_impl.dart';
+import 'package:doodle_drops/src/modules/auth/data/repositories/user_details_repository_implementation.dart';
 import 'package:doodle_drops/src/modules/auth/domain/repositories/token_repository.dart';
 import 'package:doodle_drops/src/modules/auth/domain/repositories/user_auth_repository.dart';
+import 'package:doodle_drops/src/modules/auth/domain/repositories/user_details_repository.dart';
 import 'package:doodle_drops/src/modules/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:doodle_drops/src/modules/auth/domain/use_cases/auth_register_use_case.dart';
+import 'package:doodle_drops/src/modules/auth/domain/use_cases/user_details_use_case.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -27,9 +30,13 @@ Future<void> initializeDependencies() async {
       UserAuthRepositoryImplementation(sl()));
 
   sl.registerSingleton<TokenRepository>(TokenRepositoryImplementation(sl()));
+
+  sl.registerSingleton<UserDetailsRepository>(
+      UserDetailsRepositoryImplementation(sl()));
   //use cases
   sl.registerSingleton<AuthLoginUseCase>(AuthLoginUseCase(sl()));
   sl.registerSingleton<AuthRegisterUseCase>(AuthRegisterUseCase(sl()));
+  sl.registerSingleton(UserDetailsUseCase(sl()));
   //blocs
-  sl.registerFactory(() => AuthBloc(sl(), sl(), sl()));
+  sl.registerFactory(() => AuthBloc(sl(), sl(), sl(), sl()));
 }
