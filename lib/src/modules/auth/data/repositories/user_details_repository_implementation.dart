@@ -24,7 +24,7 @@ class UserDetailsRepositoryImplementation implements UserDetailsRepository {
             await _authenticationApiService.getCurrentUserDetails(token);
         if (response.response.statusCode == HttpStatus.ok) {
           final userResponse = response.data;
-          // debugPrint('$userResponse');
+          debugPrint('USER RESPONSE: $userResponse');
           return DataSuccess(userResponse);
         } else {
           return DataFailure(DioException(
@@ -36,7 +36,6 @@ class UserDetailsRepositoryImplementation implements UserDetailsRepository {
       } else {
         return DataFailure(Exception("Token is null"));
       }
-      // debugPrint('$token');
     } on DioException catch (e) {
       debugPrint('error user details: $e');
       return DataFailure(e);

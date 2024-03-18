@@ -6,12 +6,12 @@ class RegisterUserRequest extends RegisterUserRequestEntity {
       : super(email: email, password: password, displayName: displayName);
 
   //From Json Mapper
-  factory RegisterUserRequest.fromJson(Map<String, dynamic> map) {
-    return RegisterUserRequest(
-        email: map['email'] ?? '',
-        password: map['password'] ?? '',
-        displayName: map['DisplayName'] ?? '');
-  }
+  // factory RegisterUserRequest.fromJson(Map<String, dynamic> map) {
+  //   return RegisterUserRequest(
+  //       email: map['email'] ?? '',
+  //       password: map['password'] ?? '',
+  //       displayName: map['DisplayName'] ?? '');
+  // }
 
   //To Json Mapper
   Map<String, dynamic> toJson() {
