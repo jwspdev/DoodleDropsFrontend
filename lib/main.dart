@@ -2,7 +2,10 @@ import 'package:doodle_drops/src/config/routes/routes.dart';
 import 'package:doodle_drops/src/dependency_injection/injection_container.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_bloc.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_enums.dart';
+import 'package:doodle_drops/src/modules/tags/presentation/bloc/tag_bloc.dart';
 import 'package:doodle_drops/src/tests/api_tests/auth_tests.dart';
+import 'package:doodle_drops/src/tests/api_tests/tag_tests.dart';
+import 'package:doodle_drops/src/tests/api_tests/user_tests.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
@@ -12,6 +15,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeDependencies();
   // AuthTests.testGetCurrentUser();
+  // UserTests.testUpdateUser();
+  // TagTest.listTags();
+  // TagTest.testUserLikeTags();
   runApp(const MainApp());
 }
 
@@ -26,16 +32,12 @@ class _MainAppState extends State<MainApp> {
   startTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? firstTime = prefs.getBool('first_time');
-    var duration = const Duration(seconds: 3);
+    var duration = const Duration(seconds: 1);
     if (firstTime != null && !firstTime) {
-      return Timer(duration, () {
-        debugPrint('di ko po first TIME');
-      });
+      return Timer(duration, () {});
     } else {
       prefs.setBool('first_time', false);
-      return Timer(duration, () {
-        debugPrint('FIRST TIME ko po');
-      });
+      return Timer(duration, () {});
     }
   }
 
@@ -51,6 +53,9 @@ class _MainAppState extends State<MainApp> {
         providers: [
           BlocProvider<AuthBloc>(
               create: (context) => sl()..add(CheckIfAuthenticatedEvent())),
+          // BlocProvider<TagBloc>(
+          //     create: (context) =>
+          //         sl()..add(const GetTagList(page: 1, limit: 5)))
         ],
         child: MaterialApp.router(
           routerConfig: router,
@@ -68,29 +73,3 @@ Widget checkState(var state) {
     return Text('unknown: $state');
   }
 }
-
-/**
- child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            body: BlocListener<AuthBloc, AuthState>(
-              listener: (context, state) {
-                switch (state.authenticationStatus) {
-                  case AuthenticationStatus.authenticated:
-                    context.goNamed(TestHome.routePath);
-                    break;
-                  case AuthenticationStatus.unauthenticated:
-                    context.goNamed(LoginPage.routePath);
-                    break;
-                  case AuthenticationStatus.unknown:
-                    context.goNamed(SplashScreen.routePath);
-                    break;
-                  case null:
-                    break;
-                }
-              },
-              child: const SplashScreen(),
-            ),
-          ),
-        ));
- */

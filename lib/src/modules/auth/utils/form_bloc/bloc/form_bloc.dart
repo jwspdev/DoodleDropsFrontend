@@ -30,9 +30,6 @@ class FormBloc extends Bloc<FormEvent, FormsValidatedState> {
   //check if email has been changed; include checker
   _onEmailChanged(EmailChangedFormEvent event, Emitter<FormState> emit) {
     String email = event.email;
-    debugPrint('$email');
-    // debugPrint(
-    //     'POTANGINA: ${state.copyWith(email: email, isEmailValid: _isEmailValid(email), errorMessage: !_isEmailValid(email) ? 'test error' : '')}');
     emit(state.copyWith(
         email: email,
         isEmailValid: _isEmailValid(email),

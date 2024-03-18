@@ -13,7 +13,7 @@ class _AuthenticationApiService implements AuthenticationApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.0.102:8000/api';
+    baseUrl ??= DOODLE_DROPS_ENDPOINT;
   }
 
   final Dio _dio;

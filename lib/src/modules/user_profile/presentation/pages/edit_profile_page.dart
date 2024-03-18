@@ -5,6 +5,8 @@ import 'package:doodle_drops/src/modules/auth/presentation/pages/splash_screen.d
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_bloc.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_enums.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/widgets/auth_text_field.dart';
+import 'package:doodle_drops/src/modules/tags/domain/entities/tag_entity.dart';
+import 'package:doodle_drops/src/modules/tags/presentation/bloc/tag_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,104 +53,143 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Edit Profile',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
+      ),
+      body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.authenticationStatus ==
               AuthenticationStatus.unauthenticated) {
             context.go(SplashScreen.routePath);
           }
         },
-        child: Container(
-          color: Colors.blueAccent,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CircleAvatar(
-                    radius: 56,
-                  ),
-                  const SmallerHeightedSizedBox(),
-                  const Text(
-                    "Edit Profile",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Stack(children: [
-                    Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        children: [
-                          // const Align(
-                          //   alignment: Alignment.centerLeft,
-                          //   child: Text(
-                          //     "Register",
-                          //     style: TextStyle(
-                          //         fontSize: 36, fontWeight: FontWeight.bold),
-                          //   ),
-                          // ),
-                          // const SmallestHeightedSizedBox(),
-                          const Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text("Display Name")),
-                          AuthTextField(
-                              obscureText: false,
-                              controller: _firstNameController),
-                          const Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text("First Name")),
-                          AuthTextField(
-                              obscureText: false,
-                              controller: _firstNameController),
-                          const Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text("Middle Name")),
-                          AuthTextField(
-                              obscureText: false,
-                              controller: _firstNameController),
-                          const Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text("Last Name")),
-                          AuthTextField(
-                              obscureText: false,
-                              controller: _displayNameController),
-                          const Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text("Age")),
-                          AuthTextField(
-                              obscureText: false,
-                              controller: _firstNameController),
-                          const SmallestHeightedSizedBox(),
-                          const Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text("Birthday")),
-                          AuthTextField(
-                            obscureText: true,
-                            controller: _middleNameController,
+        builder: (context, state) {
+          if (state is AuthInitial) {
+            return CupertinoActivityIndicator();
+          }
+          if (state is AuthenticationState) {
+            if (state.authenticationStatus ==
+                AuthenticationStatus.authenticated) {
+              var userDetailsResponse = state.userResponse?.userDetailsResponse;
+              var userProfileResponse =
+                  userDetailsResponse?.userProfileResponse;
+              var likedTags = userDetailsResponse?.likedTags;
+              return Container(
+                color: Colors.blueAccent,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircleAvatar(
+                          radius: 48,
+                        ),
+                        const SmallerHeightedSizedBox(),
+                        Stack(children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16))),
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              children: [
+                                _buildTextFields(),
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('Liked Tags'),
+                                        ElevatedButton(
+                                          onPressed: () {},
+                                          child: Icon(Icons.add),
+                                          style: ElevatedButton.styleFrom(
+                                            shape: CircleBorder(),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                                // Text('${likedTags}'),
+                                Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: _testListOfTags(likedTags)),
+                                const MediumHeightedSizedBox(),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue.shade800,
+                                          foregroundColor: Colors.white),
+                                      onPressed: () {
+                                        // _registerUser(context);
+                                      },
+                                      child: const Text('Apply Changes')),
+                                ),
+                              ],
+                            ),
                           ),
-                          MediumHeightedSizedBox(),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue.shade800,
-                                    foregroundColor: Colors.white),
-                                onPressed: () {
-                                  // _registerUser(context);
-                                },
-                                child: const Text('Apply Changes')),
-                          ),
-                        ],
-                      ),
+                        ])
+                      ],
                     ),
-                  ])
-                ],
-              ),
-            ),
-          ),
-        ),
+                  ),
+                ),
+              );
+            }
+          }
+
+          return Container();
+        },
       ),
     );
   }
+
+  Widget _buildTextFields() {
+    List<Widget> textFields = [
+      const Align(alignment: Alignment.bottomLeft, child: Text("Display Name")),
+      AuthTextField(obscureText: false, controller: _firstNameController),
+      const Align(alignment: Alignment.bottomLeft, child: Text("First Name")),
+      AuthTextField(obscureText: false, controller: _firstNameController),
+      const Align(alignment: Alignment.bottomLeft, child: Text("Middle Name")),
+      AuthTextField(obscureText: false, controller: _firstNameController),
+      const Align(alignment: Alignment.bottomLeft, child: Text("Last Name")),
+      AuthTextField(obscureText: false, controller: _displayNameController),
+      const Align(alignment: Alignment.bottomLeft, child: Text("Age")),
+      AuthTextField(obscureText: false, controller: _firstNameController),
+      const SmallestHeightedSizedBox(),
+      const Align(alignment: Alignment.bottomLeft, child: Text("Birthday")),
+      AuthTextField(
+        obscureText: true,
+        controller: _middleNameController,
+      ),
+      const SmallestHeightedSizedBox(),
+    ];
+    return Column(
+      children: textFields,
+    );
+  }
+
+  Widget _testListOfTags(List<TagEntity>? tags) {
+    if (tags!.isNotEmpty) {
+      List<Widget> tagButtons = [];
+      for (var tag in tags) {
+        tagButtons
+            .add(ElevatedButton(onPressed: () {}, child: Text('${tag.name}')));
+      }
+      return Wrap(
+        spacing: 20,
+        children: tagButtons,
+      );
+    } else {
+      return const Text('No Liked Tags');
+    }
+  }
+  
 }

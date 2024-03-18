@@ -4,6 +4,7 @@ import 'package:doodle_drops/src/core/widgets/sized_boxes.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/pages/login_page.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_bloc.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/widgets/auth_text_field.dart';
+import 'package:doodle_drops/src/modules/tags/presentation/bloc/tag_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
