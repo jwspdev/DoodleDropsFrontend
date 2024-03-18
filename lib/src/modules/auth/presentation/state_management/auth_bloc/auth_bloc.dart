@@ -46,10 +46,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (authRegisterUser is DataSuccess) {
       RegisterUserResponse response = authRegisterUser.data;
-      debugPrint('${response.message} ${response.data}');
-      emit(RegisterSuccessState(response: authRegisterUser.data));
+      emit(RegisterSuccessState(response: response));
     } else {
-      debugPrint('error: ${authRegisterUser.exception}');
       emit(AuthErrorState(authRegisterUser.exception));
     }
   }
@@ -60,11 +58,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         LoginUserRequest(email: event.email, password: event.password);
 
     final authLoginUser = await _authLoginUseCase.call(params: request);
-    debugPrint('entered');
-    debugPrint('$authLoginUser');
     if (authLoginUser is DataSuccess) {
       LoginUserResponse userData = authLoginUser.data;
-      debugPrint('POTA: ${userData.token}');
       await _tokenRepository.writeToken('token', AuthToken(userData.token));
       emit(LoginSuccessState(response: userData));
       add(CheckIfAuthenticatedEvent());
@@ -75,7 +70,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _logOutUser(LogoutUserEvent event, Emitter<AuthState> emit) {
     _tokenRepository.deleteToken('token');
-    debugPrint('logged out');
     emit(const AuthenticationState(
         authenticationStatus: AuthenticationStatus.unauthenticated));
   }
@@ -93,25 +87,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           authenticationStatus: AuthenticationStatus.unknown));
       final userDetails =
           await _userDetailsUseCase.call(params: 'Bearer $currentToken');
-      debugPrint('TOKEN IS NOT NULL: authenticated');
       if (userDetails is DataSuccess) {
-        debugPrint("from bloc: ${userDetails.data}");
         emit(AuthenticationState(
             authenticationStatus: AuthenticationStatus.authenticated,
             authToken: currentToken,
             userResponse: userDetails.data));
       } else {
-        debugPrint('DATAFAILURE: unauthenticated!');
         emit(const AuthenticationState(
             authenticationStatus: AuthenticationStatus.unauthenticated,
             authToken: ''));
       }
     } else {
-      debugPrint('TOKEN IS NULL: unauthenticated!');
       emit(const AuthenticationState(
           authenticationStatus: AuthenticationStatus.unauthenticated,
           authToken: ''));
     }
   }
-  //check if user is loggedIn using an event, trigger the event by checking, if the token exists, return UserAuthState with loggedIn info, else return null with status as notLoggedIn
 }

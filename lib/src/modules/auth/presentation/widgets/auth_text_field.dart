@@ -13,7 +13,7 @@ class AuthTextField extends TextFormField {
           decoration: const InputDecoration(
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue)),
-              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(16)))),
         );
