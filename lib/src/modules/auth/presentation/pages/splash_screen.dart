@@ -2,6 +2,7 @@ import 'package:doodle_drops/src/modules/auth/presentation/pages/login_page.dart
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_bloc.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_enums.dart';
 import 'package:doodle_drops/src/modules/home_page/landing_page.dart';
+import 'package:doodle_drops/src/modules/tags/presentation/pages/add_tags_page.dart';
 import 'package:doodle_drops/src/modules/user_profile/presentation/pages/edit_profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +17,12 @@ class SplashScreen extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthenticationState) {
+          // Future.delayed(Duration(seconds: 1), () {
           switch (state.authenticationStatus) {
             case AuthenticationStatus.authenticated:
-              if (state.userResponse!.userDetailsResponse!.userProfileResponse!
-                  .firstName!.isEmpty) {
-                debugPrint('yes');
-                context.go(EditProfilePage.routePath);
+              if (state.userResponse!.userDetailsResponse!.likedTags!.isEmpty) {
+                context.go(AddTagsPage.routePath);
               } else {
-                debugPrint('no');
                 context.go(LandingPage.routePath);
               }
               break;
@@ -37,9 +36,11 @@ class SplashScreen extends StatelessWidget {
               // Handle other status if needed
               break;
           }
+          // }
+          // );
         }
       },
-      child: Scaffold(body: Text('splash screen')),
+      child: Scaffold(body: Center(child: Text('splash screen'))),
     );
   }
 }
