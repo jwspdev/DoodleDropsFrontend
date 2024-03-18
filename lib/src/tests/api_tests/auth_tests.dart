@@ -12,25 +12,22 @@ import 'package:doodle_drops/src/modules/auth/domain/use_cases/user_details_use_
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 
+//SELF MADE TESTING HEHE
+
 class AuthTests {
   static void testGetCurrentUser() async {
-    debugPrint('TEST CURRENT USER');
     final dio = Dio();
     final authService = AuthenticationApiService(dio);
 
-    // debugPrint('$authService');
     final SecuredStorageService securedStorageService = SecuredStorageService();
-    // debugPrint('$securedStorageService');
     final TokenRepository tokenRepository =
         TokenRepositoryImplementation(securedStorageService);
-    // debugPrint('$tokenRepository');
     final UserDetailsRepositoryImplementation
         userDetailsRepositoryImplementation =
         UserDetailsRepositoryImplementation(authService);
 
     final UserDetailsUseCase userDetailsUseCase =
         UserDetailsUseCase(userDetailsRepositoryImplementation);
-    // debugPrint('$userDe`tailsRepositoryImplementation');
     const sampleToken =
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTE3NzYxNzYsInN1YiI6OTF9.I0rxjoSPDAzeMP858VZj2BPGQ7jkstlrtEMvcNi4zl0";
     try {
@@ -55,9 +52,6 @@ class AuthTests {
       final response = await authService
           .register(registerUserRequest)
           .then((value) => debugPrint('POTRAGIS ${value.data}'));
-
-      // debugPrint('Reponse Status Code: ${response.re}');
-      // debugPrint('Response Data: ${response.response}');
     } catch (error) {
       debugPrint('Error: $error');
     }
@@ -73,7 +67,6 @@ class AuthTests {
       const loginUserRequest =
           LoginUserRequest(email: 'warren', password: 'ecinlodi');
       final response = await userAuthRepository.getUserToken(loginUserRequest);
-      debugPrint('Response status code: ${response.data}');
       if (response is DataSuccess) {
         debugPrint(response.data!.message);
       } else {
