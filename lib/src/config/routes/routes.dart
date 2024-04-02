@@ -5,7 +5,8 @@ import 'package:doodle_drops/src/modules/auth/presentation/pages/splash_screen.d
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_bloc.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_enums.dart';
 import 'package:doodle_drops/src/modules/home_page/landing_page.dart';
-import 'package:doodle_drops/src/modules/tags/data/models/tag_model.dart';
+import 'package:doodle_drops/src/modules/posts/domain/entities/responses/post_with_extras_entity.dart';
+import 'package:doodle_drops/src/modules/posts/presentation/pages/current_post_page.dart';
 import 'package:doodle_drops/src/modules/tags/domain/entities/tag_entity.dart';
 import 'package:doodle_drops/src/modules/tags/presentation/bloc/tag_bloc.dart';
 import 'package:doodle_drops/src/modules/tags/presentation/pages/add_tags_page.dart';
@@ -23,13 +24,14 @@ final GoRouter router = GoRouter(
       if (state.fullPath == RegisterPage.routePath) {
         return RegisterPage.routePath;
       }
+      if (state.fullPath == CurrentPostPage.routePath) {
+        return CurrentPostPage.routePath;
+      }
       var authState = context.read<AuthBloc>().state;
       var authStatus = authState.authenticationStatus;
-      debugPrint('ROUTER: $authStatus');
       if (authStatus == AuthenticationStatus.authenticated) {
         if (authState is AuthenticationState) {
           var userResponse = authState.userResponse;
-          debugPrint('router: ${userResponse}');
           List<TagEntity>? tagModels =
               userResponse?.userDetailsResponse!.likedTags;
           if (tagModels!.isNotEmpty) {
@@ -69,5 +71,11 @@ final GoRouter router = GoRouter(
             child: const AddTagsPage(),
           );
         },
-      )
+      ),
+      GoRoute(
+          path: CurrentPostPage.routePath,
+          builder: (context, state) {
+            PostWithExtrasEntity entity = state.extra as PostWithExtrasEntity;
+            return CurrentPostPage(entity: entity);
+          }),
     ]);
