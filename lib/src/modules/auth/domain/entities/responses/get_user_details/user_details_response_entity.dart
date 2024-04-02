@@ -5,12 +5,18 @@ import 'package:equatable/equatable.dart';
 class UserDetailsResponseEntity extends Equatable {
   final DateTime? updatedAt;
   final String? email;
+  final int? id;
   final UserProfileResponseEntity? userProfileResponse;
   final List<TagEntity>? likedTags;
 
   const UserDetailsResponseEntity(
-      {this.updatedAt, this.email, this.userProfileResponse, this.likedTags});
+      {this.id,
+      this.updatedAt,
+      this.email,
+      this.userProfileResponse,
+      this.likedTags});
 
   @override
-  List<Object?> get props => [updatedAt, email, userProfileResponse, likedTags];
+  List<Object?> get props =>
+      [id, updatedAt, email, userProfileResponse, likedTags];
 }

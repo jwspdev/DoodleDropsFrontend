@@ -77,17 +77,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _checkIfAuthenticated(
       CheckIfAuthenticatedEvent event, Emitter<AuthState> emit) async {
     emit(const AuthInitial(authenticationStatus: AuthenticationStatus.unknown));
-
+    debugPrint('Entered auth');
     Future<AuthToken?> tokenFuture =
         Future.value(_tokenRepository.readToken('token'));
     AuthToken? token = await tokenFuture;
+    debugPrint('$token');
     if (token != null) {
       String currentToken = token.token;
+      // debugPrint('TOKEN: $currentToken');
       emit(const AuthInitial(
           authenticationStatus: AuthenticationStatus.unknown));
       final userDetails =
           await _userDetailsUseCase.call(params: 'Bearer $currentToken');
       if (userDetails is DataSuccess) {
+        debugPrint('Auth Print: ${userDetails.data}');
         emit(AuthenticationState(
             authenticationStatus: AuthenticationStatus.authenticated,
             authToken: currentToken,
