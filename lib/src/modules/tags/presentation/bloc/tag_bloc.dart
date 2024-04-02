@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:doodle_drops/src/core/resources/data_state.dart';
 import 'package:doodle_drops/src/core/utils/entities/responses/message_response_entity.dart';
 import 'package:doodle_drops/src/core/utils/models/requests/paginate_request.dart';
+import 'package:doodle_drops/src/core/utils/params/paginate_params.dart';
 import 'package:doodle_drops/src/modules/auth/data/models/responses/auth_token.dart';
 import 'package:doodle_drops/src/modules/auth/domain/repositories/token_repository.dart';
 import 'package:doodle_drops/src/modules/tags/data/models/requests/tag_user_like_request.dart';
@@ -46,7 +47,7 @@ class TagBloc extends Bloc<TagEvent, TagState> {
     if (token != null) {
       String currentToken = 'Bearer ${token.token}';
       final tagResponse = await _tagListUseCase.call(
-          params: TagListParams(currentToken, paginateRequest));
+          params: PaginateParams(currentToken, paginateRequest));
       debugPrint('FROM TAG BLOC: ${tagResponse.data?.tags}');
       if (tagResponse is DataSuccess) {
         emit(TagListRetrievedState(tagListResponse: tagResponse.data?.tags));
@@ -101,7 +102,7 @@ class TagBloc extends Bloc<TagEvent, TagState> {
         //test for delay to see if the progress indicator appears.
         await Future.delayed(const Duration(seconds: 2));
         var tagResponse = await _tagListUseCase.call(
-            params: TagListParams(
+            params: PaginateParams(
                 currentToken, PaginateRequest(pageNumber: page, limit: 8)));
         List<TagEntity> retrievedTags = tagResponse.data?.tags ?? [];
         List<TagEntity> cleanListOfTags = [...state.tagListResponse!];

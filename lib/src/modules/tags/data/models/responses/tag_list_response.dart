@@ -12,10 +12,11 @@ class TagListResponse extends TagListResponseEntity {
       tags = List<TagModel>.from(
           map['tags'].map((tagMap) => TagModel.fromJson(tagMap)));
     }
-    return TagListResponse(
+    var tagResponse = TagListResponse(
         page: map['page'] ?? 0,
         pageSize: map['page_size'] ?? 0,
         tags: tags,
         totalTags: map['total_tags'] ?? 0);
+    return tagResponse;
   }
 }
