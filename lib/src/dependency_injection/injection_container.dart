@@ -11,6 +11,11 @@ import 'package:doodle_drops/src/modules/auth/domain/use_cases/auth_login_use_ca
 import 'package:doodle_drops/src/modules/auth/domain/use_cases/auth_register_use_case.dart';
 import 'package:doodle_drops/src/modules/auth/domain/use_cases/user_details_use_case.dart';
 import 'package:doodle_drops/src/modules/auth/presentation/state_management/auth_bloc/auth_bloc.dart';
+import 'package:doodle_drops/src/modules/posts/data/data_sources/post_api_service.dart';
+import 'package:doodle_drops/src/modules/posts/data/repositories/post_repository_impl.dart';
+import 'package:doodle_drops/src/modules/posts/domain/repository/post_repository.dart';
+import 'package:doodle_drops/src/modules/posts/domain/use_case/list_post_use_case.dart';
+import 'package:doodle_drops/src/modules/posts/presentation/bloc/post_bloc.dart';
 import 'package:doodle_drops/src/modules/tags/data/data_sources/remote/tag_api_service.dart';
 import 'package:doodle_drops/src/modules/tags/data/repository/tag_repository_impl.dart';
 import 'package:doodle_drops/src/modules/tags/domain/repositories/tag_repository.dart';
@@ -28,7 +33,7 @@ Future<void> initializeDependencies() async {
   //retrofit api services
   sl.registerSingleton(AuthenticationApiService(sl()));
   sl.registerSingleton(TagApiService(sl()));
-
+  sl.registerSingleton(PostApiService(sl()));
   //local storage services
   sl.registerSingleton(SecuredStorageService());
 
@@ -42,13 +47,16 @@ Future<void> initializeDependencies() async {
 
   sl.registerSingleton<UserDetailsRepository>(
       UserDetailsRepositoryImplementation(sl()));
+  sl.registerSingleton<PostRepository>(PostRepositoryImplementaion(sl()));
   //use cases
   sl.registerSingleton<AuthLoginUseCase>(AuthLoginUseCase(sl()));
   sl.registerSingleton<AuthRegisterUseCase>(AuthRegisterUseCase(sl()));
   sl.registerSingleton(UserDetailsUseCase(sl()));
   sl.registerSingleton(TagListUseCase(sl()));
   sl.registerSingleton(UserLikeTagsUseCase(sl()));
+  sl.registerSingleton(ListPostUseCase(sl()));
   //blocs
   sl.registerFactory(() => AuthBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory(() => TagBloc(sl(), sl(), sl()));
+  sl.registerFactory(() => PostBloc(sl(), sl()));
 }

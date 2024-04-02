@@ -6,6 +6,7 @@ import 'package:doodle_drops/src/modules/tags/presentation/bloc/tag_bloc.dart';
 import 'package:doodle_drops/src/tests/api_tests/auth_tests.dart';
 import 'package:doodle_drops/src/tests/api_tests/tag_tests.dart';
 import 'package:doodle_drops/src/tests/api_tests/user_tests.dart';
+import 'package:doodle_drops/src/tests/post_tests/PostTest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
@@ -15,10 +16,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeDependencies();
   // AuthTests.testGetCurrentUser();
+  // test();
   // UserTests.testUpdateUser();
   // TagTest.listTags();
   // TagTest.testUserLikeTags();
+  // PostTest.testGetPostList();
+  // PostTest.testGetUserLikedPost();
   runApp(const MainApp());
+}
+
+void test() {
+  debugPrint('Hello!');
 }
 
 class MainApp extends StatefulWidget {
@@ -53,9 +61,6 @@ class _MainAppState extends State<MainApp> {
         providers: [
           BlocProvider<AuthBloc>(
               create: (context) => sl()..add(CheckIfAuthenticatedEvent())),
-          // BlocProvider<TagBloc>(
-          //     create: (context) =>
-          //         sl()..add(const GetTagList(page: 1, limit: 5)))
         ],
         child: MaterialApp.router(
           routerConfig: router,

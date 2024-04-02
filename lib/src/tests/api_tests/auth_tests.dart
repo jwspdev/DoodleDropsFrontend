@@ -29,14 +29,21 @@ class AuthTests {
     final UserDetailsUseCase userDetailsUseCase =
         UserDetailsUseCase(userDetailsRepositoryImplementation);
     const sampleToken =
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTE3NzYxNzYsInN1YiI6OTF9.I0rxjoSPDAzeMP858VZj2BPGQ7jkstlrtEMvcNi4zl0";
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI4MTEzMDAsInN1YiI6OTF9.ZEPvYZ2lm4p6GYqlqZrlEIXE3ZA42mmOubcInsHdXtU";
     try {
-      final response = await userDetailsUseCase
-          .call(params: sampleToken)
-          .then((value) => debugPrint('${value.data}'));
+      authService
+          .getCurrentUserDetails(sampleToken)
+          .then((value) => debugPrint('$value'));
     } catch (error) {
       debugPrint('$error');
     }
+    // try {
+    //   final response = await userDetailsUseCase
+    //       .call(params: sampleToken)
+    //       .then((value) => debugPrint('${value.data}'));
+    // } catch (error) {
+    //   debugPrint('$error');
+    // }
   }
 
   static void testRegister() async {

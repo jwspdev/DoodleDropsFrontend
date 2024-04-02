@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:doodle_drops/src/core/utils/models/requests/paginate_request.dart';
+import 'package:doodle_drops/src/core/utils/params/paginate_params.dart';
 import 'package:doodle_drops/src/modules/tags/data/data_sources/remote/tag_api_service.dart';
 import 'package:doodle_drops/src/modules/tags/data/models/requests/tag_user_like_request.dart';
 import 'package:doodle_drops/src/modules/tags/data/repository/tag_repository_impl.dart';
@@ -39,7 +40,7 @@ class TagTest {
       const sampleToken =
           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI4MTEzMDAsInN1YiI6OTF9.ZEPvYZ2lm4p6GYqlqZrlEIXE3ZA42mmOubcInsHdXtU';
       await useCase
-          .call(params: TagListParams(sampleToken, request))
+          .call(params: PaginateParams(sampleToken, request))
           .then((value) => debugPrint('${value.data}'));
     } catch (error) {
       debugPrint('error from usecase: $error');
