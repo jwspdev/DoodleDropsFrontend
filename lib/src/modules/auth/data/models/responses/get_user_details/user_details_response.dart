@@ -4,11 +4,13 @@ import 'package:doodle_drops/src/modules/tags/data/models/tag_model.dart';
 
 class UserDetailsResponse extends UserDetailsResponseEntity {
   const UserDetailsResponse({
+    int? id,
     DateTime? updatedAt,
     String? email,
     UserProfileResponse? userProfileResponse,
     List<TagModel>? likedTags,
   }) : super(
+            id: id,
             updatedAt: updatedAt,
             email: email,
             userProfileResponse: userProfileResponse,
@@ -21,6 +23,7 @@ class UserDetailsResponse extends UserDetailsResponseEntity {
           map['liked_tags'].map((tagMap) => TagModel.fromJson(tagMap)));
     }
     return UserDetailsResponse(
+        id: map['id'],
         updatedAt: DateTime.parse(map['updated_at']),
         email: map['email'],
         userProfileResponse:

@@ -24,7 +24,7 @@ class UserDetailsRepositoryImplementation implements UserDetailsRepository {
             await _authenticationApiService.getCurrentUserDetails(token);
         if (response.response.statusCode == HttpStatus.ok) {
           final userResponse = response.data;
-          debugPrint('USER RESPONSE: $userResponse');
+          // debugPrint('USER RESPONSE: $userResponse');
           return DataSuccess(userResponse);
         } else {
           return DataFailure(DioException(
